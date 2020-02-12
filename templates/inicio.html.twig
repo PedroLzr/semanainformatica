@@ -1,0 +1,27 @@
+{% extends 'layout.html.twig' %}
+
+{% block nav %}
+
+    <div class="container-fluid">
+        <div class="row mx-auto">
+            <nav class="col-12 nav nav-pills flex-column flex-sm-row" role="navigation">
+                <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('inicio') }}">Inicio</a>
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_ponencias') }}">Ponencias</a>
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_talleres') }}">Talleres</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nueva_ponencia') }}">Ponencia++</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_taller') }}">Taller++</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_usuario') }}">Nuevo Usuario</a>
+                {% endif %}
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+            </nav>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block main %}
+
+   <img src="{{ asset('img/logo-semana-info.jpg') }}" class="img-fluid" alt="Logo principal">
+
+{% endblock %}

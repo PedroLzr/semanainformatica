@@ -1,0 +1,61 @@
+{% extends 'layout.html.twig' %}
+
+{% block nav %}
+
+    <div class="container-fluid">
+        <div class="row mx-auto">
+            <nav class="col-12 nav nav-pills flex-column flex-sm-row" role="navigation">
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('inicio') }}">Inicio</a>
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_ponencias') }}">Ponencias</a>
+                <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('listar_talleres') }}">Talleres</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nueva_ponencia') }}">Ponencia++</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_taller') }}">Taller++</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_usuario') }}">Nuevo Usuario</a>
+                {% endif %}
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+            </nav>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block main %}
+    <h1> Lista de Talleres </h1>
+    {% if talleres %}
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Título</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Me gusta</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+        {% for taller in talleres %}
+                <tr>
+                    <th scope="row">{{ taller.id }}</th>
+                    <td>{{ taller.titulota }}</td>
+                    <td>{{ taller.categoriatallerId.nombre }}</td>
+                    <td>{{ taller.liketa }}</td>
+                    <td><a href="{{ path('sumar_like_taller', {'id': taller.id}) }}" class="btn btn-primary btn-md"> <i class="fas fa-thumbs-up"></i> </a></td>
+                    <td><a href="{{ path('restar_like_taller', {'id': taller.id}) }}""#" class="btn btn-primary btn-md"> <i class="fas fa-thumbs-down"></i> </a></td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td><a href="{{ path('editar_taller', {'id': taller.id})}}" class="btn btn-primary btn-lg"> <i class="fas fa-edit"></i> Editar </a></td>
+                        <td><a href="{{ path('eliminar_taller', {'id': taller.id})}}" class="btn btn-danger btn-lg"> <i class="fas fa-trash"></i> Eliminar</a></td>
+                    {% endif %}
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p> No se han encontrado talleres </p>
+    {% endif %}
+{% endblock %}

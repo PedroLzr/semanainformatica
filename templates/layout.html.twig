@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Semana Informática {% endblock %}
+
+{% block header %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="page-header">
+                <img src="{{ asset('img/cabecera.jpg') }}" class="img-fluid" alt="Logo principal">
+                <span class="col-4">Hoy es: {{ "now" | date("d/m/Y") }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block nav %}
+
+    <div class="container-fluid">
+        <div class="row mx-auto">
+            <nav class="col-12 nav nav-pills flex-column flex-sm-row" role="navigation">
+                {% if is_granted('ROLE_USER') %}
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('inicio') }}">Inicio</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_ponencias') }}">Ponencias</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_talleres') }}">Talleres</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nueva_ponencia') }}">Ponencia++</a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_taller') }}">Taller++</a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_usuario') }}">Nuevo Usuario</a>
+                    {% endif %}
+                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                {% else %}
+                    <a class="flex-sm-fill text-sm-center nav-link active" href="#">Acceder</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <footer class="page-footer font-small blue pt-4">
+        <div class="footer-copyright text-center py-3">- DWES 2019/2020 -
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{ path('logout') }}">[ Salir ]</a>
+            {% endif %}
+        </div>
+    </footer>
+    
+    
+{% endblock %}

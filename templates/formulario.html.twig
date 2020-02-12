@@ -1,0 +1,12 @@
+{% extends 'layout.html.twig' %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row mx-auto">
+            {{ form_start(formulario) }}
+            {{ form_widget(formulario) }}
+            {{ form_end(formulario) }}
+        </div>
+    </div>
+{% endblock %}
+
