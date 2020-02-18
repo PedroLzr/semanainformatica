@@ -18,12 +18,24 @@ class TallerController extends AbstractController{
     /**
     * @Route("/talleres", name="listar_talleres")
     */
-    public function ponencias(){
+    public function talleres(Request $request){
+        $talleres = null;
+        $formulario = $this->createFormBuilder()
+            ->add('categoriataller_id', EntityType::class, array('class' => Categoriataller::class, 'choice_label' => 'nombre', 'label' => 'Categoría'))
+            ->add('save', SubmitType::class, (array('label' => "Buscar")))
+            ->getForm();
+        $formulario->handleRequest($request);
+
         $repositorio = $this->getDoctrine()->getRepository(Taller::class);
         $talleres = $repositorio->findAll();
 
+        if($formulario->isSubmitted() && $formulario->isValid()){
+            $repositorio = $this->getDoctrine()->getRepository(Taller::class);
+            $talleres = $repositorio->buscarTalleresPorCategoria($formulario->getData()['categoriataller_id']);
+        }
 
-        return $this->render('talleres.html.twig', array("talleres" => $talleres));
+
+        return $this->render('talleres.html.twig', array('formulario' => $formulario->createView(), "talleres" => $talleres));
     }
 
     /**
@@ -50,7 +62,7 @@ class TallerController extends AbstractController{
             return $this->redirectToRoute('listar_talleres');
         }
 
-        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView()));
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Editar taller"));
     }
 
     /**
@@ -91,7 +103,7 @@ class TallerController extends AbstractController{
             return $this->redirectToRoute('listar_talleres');
         }
 
-        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView()));
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Añadir taller"));
     }
 
     /**

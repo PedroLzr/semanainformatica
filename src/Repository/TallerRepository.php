@@ -19,6 +19,13 @@ class TallerRepository extends ServiceEntityRepository
         parent::__construct($registry, Taller::class);
     }
 
+    public function buscarTalleresPorCategoria($id):array{
+        $talleres = null;
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery('SELECT t FROM App\Entity\Taller t WHERE t.categoriataller_id = :id');
+        $query->setParameter('id', $id);
+        return $query->getResult();
+    }
     // /**
     //  * @return Taller[] Returns an array of Taller objects
     //  */

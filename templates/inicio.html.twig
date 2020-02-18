@@ -2,19 +2,29 @@
 
 {% block nav %}
 
-    <div class="container-fluid">
-        <div class="row mx-auto">
-            <nav class="col-12 nav nav-pills flex-column flex-sm-row" role="navigation">
+    <div class="container">
+        <div class="row">
+            <nav class="nav nav-pills flex-sm-row mx-auto" role="navigation" style='margin: 16px'>
                 <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('inicio') }}">Inicio</a>
                 <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_ponencias') }}">Ponencias</a>
                 <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('listar_talleres') }}">Talleres</a>
                 {% if is_granted('ROLE_ADMIN') %}
                     <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nueva_ponencia') }}">Ponencia++</a>
                     <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_taller') }}">Taller++</a>
-                    <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('nuevo_usuario') }}">Nuevo Usuario</a>
+                    <li class="nav-item dropdown">
+                            <a class="flex-sm-fill text-sm-center nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Usuarios
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ path('nuevo_usuario') }}">Nuevo Usuario</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path('listar_usuarios') }}">Editar Usuario</a>
+                            </div>
+                        </li>
                 {% endif %}
                 <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
             </nav>
+            </div>
         </div>
     </div>
 
@@ -22,6 +32,13 @@
 
 {% block main %}
 
-   <img src="{{ asset('img/logo-semana-info.jpg') }}" class="img-fluid" alt="Logo principal">
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto" style='margin-top: 60px'>
+                <span class="col-4">Usuario: <strong>{{ app.user.username }}</strong></span>
+                <img src="{{ asset('img/logo-semana-info.jpg') }}" class="img-fluid" alt="Logo principal">
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

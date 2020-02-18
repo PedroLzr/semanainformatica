@@ -18,12 +18,26 @@ class PonenciaController extends AbstractController{
     /**
     * @Route("/ponencias", name="listar_ponencias")
     */
-    public function ponencias(){
+    public function ponencias(Request $request){
+        $ponencias = null;
+        $formulario = $this->createFormBuilder()
+            ->add('categoriaponencia_id', EntityType::class, array('class' => Categoriaponencia::class, 'choice_label' => 'nombre', 'label' => 'Categoría'))
+            ->add('save', SubmitType::class, (array('label' => "Buscar")))
+            ->getForm();
+        $formulario->handleRequest($request);
+
         $repositorio = $this->getDoctrine()->getRepository(Ponencia::class);
         $ponencias = $repositorio->findAll();
 
+        if($formulario->isSubmitted() && $formulario->isValid()){
+            $repositorio = $this->getDoctrine()->getRepository(Ponencia::class);
+            $ponencias = $repositorio->buscarPonenciasPorCategoria($formulario->getData()['categoriaponencia_id']);
+        }
 
-        return $this->render('ponencias.html.twig', array("ponencias" => $ponencias));
+        return $this->render('ponencias.html.twig', array('formulario' => $formulario->createView(), 'ponencias' => $ponencias));
+
+
+        //return $this->render('ponencias.html.twig', array("ponencias" => $ponencias));
     }
 
     /**
@@ -50,7 +64,7 @@ class PonenciaController extends AbstractController{
             return $this->redirectToRoute('listar_ponencias');
         }
 
-        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView()));
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Editar ponencia"));
     }
 
     /**
@@ -91,7 +105,7 @@ class PonenciaController extends AbstractController{
             return $this->redirectToRoute('listar_ponencias');
         }
 
-        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView()));
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Añadir Ponencia"));
     }
 
     /**

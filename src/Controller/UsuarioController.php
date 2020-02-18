@@ -15,6 +15,17 @@ use App\Entity\Usuario;
 class UsuarioController extends AbstractController{
 
     /**
+    * @Route("/usuarios", name="listar_usuarios")
+    */
+    public function usuarios(){
+        $repositorio = $this->getDoctrine()->getRepository(Usuario::class);
+        $usuarios = $repositorio->findAll();
+
+
+        return $this->render('usuarios.html.twig', array("usuarios" => $usuarios));
+    }
+
+    /**
      * @Route("/nuevo_usuario", name="nuevo_usuario")
      */
     public function nuevoUsuario(Request $request){
@@ -43,7 +54,53 @@ class UsuarioController extends AbstractController{
             return $this->redirectToRoute('inicio');
         }
 
-        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView()));
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Añadir usuario"));
+    }
+
+    /**
+     * @Route("/eliminarusuario/{id}", name="eliminar_usuario")
+     */
+    public function eliminar($id){
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $repositorio = $this->getDoctrine()->getRepository(Usuario::class);
+        $usuario = $repositorio->find($id);
+        $entityManager->remove($usuario);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('listar_usuarios');
+    }
+
+    /**
+     * @Route("/editarusuario/{id}", name="editar_usuario")
+     */
+    public function editarUsuario(Request $request, $id){
+        $repositorio = $this->getDoctrine()->getRepository(Usuario::class);
+        $usuario = $repositorio->find($id);
+
+        $formulario = $this->createFormBuilder($usuario)
+            ->add('user', TextType::class, array('label' => 'Nombre'))
+            ->add('email', TextType::class, array('label' => 'Correo electrónico'))
+            ->add('rol', ChoiceType::class, [
+                'choices'  => [
+                    'Usuario' => 'ROLE_USER',
+                    'Administrador' => 'ROLE_ADMIN',
+                ],
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Editar Usuario'))
+            ->getForm();
+
+        $formulario->handleRequest($request);
+
+        if($formulario->isSubmitted() && $formulario->isValid()){
+            $usuario = $formulario->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($usuario);
+            $entityManager->flush();
+            return $this->redirectToRoute('listar_usuarios');
+        }
+
+        return $this->render('formulario.html.twig', array('formulario' => $formulario->createView(), 'titulo' => "Editar usuario"));
     }
 }
 

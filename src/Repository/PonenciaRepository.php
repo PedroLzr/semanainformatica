@@ -19,6 +19,14 @@ class PonenciaRepository extends ServiceEntityRepository
         parent::__construct($registry, Ponencia::class);
     }
 
+    public function buscarPonenciasPorCategoria($id):array{
+        $ponencias = null;
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery('SELECT p FROM App\Entity\Ponencia p WHERE p.categoriaponencia_id = :id');
+        $query->setParameter('id', $id);
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Ponencia[] Returns an array of Ponencia objects
     //  */

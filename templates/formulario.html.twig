@@ -1,11 +1,14 @@
 {% extends 'layout.html.twig' %}
 
 {% block main %}
-    <div class="container-fluid">
-        <div class="row mx-auto">
-            {{ form_start(formulario) }}
-            {{ form_widget(formulario) }}
-            {{ form_end(formulario) }}
+    <div class="container">
+        <h1 class="display-4 text-center">{{ titulo }}</h1>
+        <div class="row">
+            <div class="form-horizontal mx-auto" style='margin-top: 40px'>
+                {{ form_start(formulario) }}
+                {{ form_widget(formulario) }}
+                {{ form_end(formulario) }}
+            </div>
         </div>
     </div>
 {% endblock %}
